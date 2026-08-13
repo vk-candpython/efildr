@@ -181,16 +181,16 @@ qemu-system-x86_64 -bios /usr/share/ovmf/OVMF.fd \
 The loader (`loader.h`) exposes three compile‑time switches that control its behaviour:
 
 ```c
-#define USING_ANTI_VM          1
-#define USING_ANTI_DEBUG       1
-#define USING_ERASE_PE_HEADERS 1
+#define USING_ANTI_VM          0
+#define USING_ANTI_DEBUG       0
+#define USING_ERASE_PE_HEADERS 0
 ```
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| **`USING_ANTI_VM`** | `1` | Enables detection of virtualised environments |
-| **`USING_ANTI_DEBUG`** | `1` | Enables anti‑debugging checks |
-| **`USING_ERASE_PE_HEADERS`** | `1` | Erases DOS/NT headers from memory after loading |
+| **`USING_ANTI_VM`** | `0` | Enables detection of virtualised environments |
+| **`USING_ANTI_DEBUG`** | `0` | Enables anti‑debugging checks |
+| **`USING_ERASE_PE_HEADERS`** | `0` | Erases DOS/NT headers from memory after loading |
 
 > Changing any flag requires rebuilding the loader stub (`./setup.sh`) before packing.
 
@@ -284,9 +284,9 @@ qemu-system-x86_64 -bios /usr/share/ovmf/OVMF.fd \
 ## ⚙️ Флаги конфигурации времени сборки
 
 ```c
-#define USING_ANTI_VM          1
-#define USING_ANTI_DEBUG       1
-#define USING_ERASE_PE_HEADERS 1
+#define USING_ANTI_VM          0
+#define USING_ANTI_DEBUG       0
+#define USING_ERASE_PE_HEADERS 0
 ```
 
 | Флаг | Описание |
