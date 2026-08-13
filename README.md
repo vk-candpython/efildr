@@ -4,7 +4,7 @@
 <div align="center">
 
 [![Platform](https://img.shields.io/badge/platform-UEFI-blue?logo=uefi&logoColor=white)](https://uefi.org)
-[![Language](https://img.shields.io/badge/language-C%2FC%2B%2B-00599C?logo=c%2B%2B)](https://en.cppreference.com/)
+[![Language](https://img.shields.io/badge/language-C-00599C?logo=c)](https://en.cppreference.com/)
 [![Builder](https://img.shields.io/badge/builder-Python%203-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
