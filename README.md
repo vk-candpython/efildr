@@ -10,6 +10,8 @@
 
 *Compress, Encrypt, Fileless Execute — One EFI binary, zero traces.*
 
+### 📺 [Watch demo on YouTube](https://www.youtube.com/watch?v=yT6yCbjUaeI)
+
 </div>
 
 ---
