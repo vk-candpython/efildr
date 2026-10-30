@@ -5,7 +5,7 @@
 #     LOCATION : Ukraine
 #
 # [ PINFO ]
-#     DATE     : 06.08.2026
+#     DATE     : 31.10.2026
 #     PROJECT  : EFILDR-BUILDER
 #     PLATFORM : x86_64
 #=================================#
@@ -105,8 +105,8 @@ RLE_BUF_SIZE = lambda sz: (
 
 # STRUCTURES & CONSTANTS EFI PE32+
 
-EFI_FILE_MIN_SIZE = 512     # 512 B
-EFI_FILE_MAX_SIZE = 8 << 20 # 8 MiB
+EFI_FILE_MIN_SIZE = 1  << 10 # 1  KiB
+EFI_FILE_MAX_SIZE = 16 << 20 # 16 MiB
 
 IMAGE_DOS_SIGNATURE             = b'MZ'
 IMAGE_NT_SIGNATURE              = b'PE\0\0'
@@ -236,7 +236,7 @@ def ArxEncrypt(dat, key):
         # Invert step 5: _r = (~_r ^ _k3) + (_k1 ^ (_k2 & ~_s))
         t  = (p - (k1 ^ (k2 & ~s))) & 0xFF
         t  = (t ^ k3) & 0xFF
-        r4 = (~t) & 0xFF
+        r4 = ~t & 0xFF
 
         # Invert step 4: _r = ((_r << 3) | (_r >> 5)) - (_s << 1)
         t  = (r4 + (s << 1)) & 0xFF
@@ -252,7 +252,7 @@ def ArxEncrypt(dat, key):
         # Invert step 1: _r = (~(b) ^ _s) + _k3
         t = (r1 - k3) & 0xFF
         t = (t ^ s) & 0xFF
-        b = (~t) & 0xFF
+        b = ~t & 0xFF
 
 
         dat[i] = b # Write ciphertext byte
