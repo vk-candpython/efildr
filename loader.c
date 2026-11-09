@@ -28,6 +28,9 @@ INTERNAL LOADER DECLARATIONS */
 #include "loader.h"
 
 
+#if !defined(_GNU_EFI)
+    #error "efildr: GNU-EFI headers are required."
+#endif
 
 
 /* Compile-time validation of feature flags */

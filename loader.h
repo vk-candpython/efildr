@@ -31,6 +31,18 @@
     #error "efildr: GCC compiler is required."
 #endif
 
+#if defined(__STRICT_ANSI__)
+    #error "efildr: GNU extensions required."
+#endif
+
+#if !defined(__STDC_VERSION__) || (__STDC_VERSION__ < 201112L)
+    #error "efildr: C11 standard or higher is required."
+#endif
+
+#if !defined(__SIZEOF_WCHAR_T__) || (__SIZEOF_WCHAR_T__ != 2)
+    #error "efildr: -fshort-wchar flag is required."
+#endif
+
 #if !defined(__linux__)
     #error "efildr: Linux OS is required."
 #endif
