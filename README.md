@@ -108,7 +108,7 @@ PHASE 1: PE VALIDATION
 ├── Checks signatures (MZ, PE)
 ├── Confirms x86‑64 machine type
 ├── Verifies PE32+ magic and EFI application subsystem
-└── Enforces size limits (512 B – 8 MiB)
+└── Enforces size limits (1 KiB – 16 MiB)
 
 PHASE 2: COMPRESSION
 ├── Custom run‑length encoding (min run 3, max 127)
