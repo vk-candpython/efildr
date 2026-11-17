@@ -21,8 +21,8 @@
 ///========================================///
 
 
-#if !defined(__GNUC__)
-    #error "uefidef.h: GCC or Clang compiler is required."
+#if !defined(__clang__) && !defined(__MINGW64__)
+    #error "uefidef.h: Clang or MinGW-w64 compiler is required."
 #endif
 
 
