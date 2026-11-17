@@ -522,12 +522,12 @@ _ret:
 EFI_STATUS EFIAPI efi_main(
     EFI_HANDLE        ImageHandle,
     EFI_SYSTEM_TABLE *SystemTable
-) { CHAR16           *_ErrorExitString = NULL;
+) {
+    InitializeLib(ImageHandle, SystemTable);
 
 _ANTITRAP();
+    CHAR16 *_ErrorExitString = NULL;
     UINT64 AddrOfEntryPoint;
-
-    InitializeLib(ImageHandle, SystemTable);
 _ANTITRAP();
 
 
