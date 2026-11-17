@@ -22,47 +22,14 @@
 
 
 
-/************************************
- *     COMPILATION REQUIREMENTS     *
- ************************************/
+/*******************
+ *     INCLUDE     *
+ *******************/
 
 
-#if !defined(__GNUC__) || defined(__clang__)
-    #error "efildr: GCC compiler is required."
-#endif
-
-#if defined(__STRICT_ANSI__)
-    #error "efildr: GNU extensions required."
-#endif
-
-#if !defined(__STDC_VERSION__) || (__STDC_VERSION__ < 201112L)
-    #error "efildr: C11 standard or higher is required."
-#endif
-
-#if !defined(__SIZEOF_WCHAR_T__) || (__SIZEOF_WCHAR_T__ != 2)
-    #error "efildr: -fshort-wchar flag is required."
-#endif
-
-#if !defined(__linux__)
-    #error "efildr: Linux OS is required."
-#endif
-
-#if !defined(__x86_64__)
-    #error "efildr: x86_64 architecture is required."
-#endif
-
-
-
-
-/********************
- *     INCLUDES     *
- ********************/
-
-
-/* GNU-EFI headers,
-   UEFI core definitions */
-#include <efi.h>
-#include <efilib.h>
+/* https://github.com/vk-candpython/efildr/blob/main/uefidef.h
+INTERNAL UEFI (x86_64) DECLARATIONS */
+#include "uefidef.h"
 
 
 

