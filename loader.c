@@ -5,7 +5,7 @@
 //     LOCATION : Ukraine
 //
 // [ PINFO ]
-//     DATE     : 17.11.2026
+//     DATE     : 19.11.2026
 //     PROJECT  : REFLECTIVE-EFI-LOADER
 //     PLATFORM : UEFI
 /*=====================================*/
@@ -84,6 +84,7 @@ _FLAG_IS_BOOLEAN(  USING_ERASE_PE_HEADERS  );
 
 /* Finds a case-insensitive ASCII
    substring in a CHAR16 string */
+#if (USING_ANTI_VM)
 DEC_FUNC(BOOLEAN) FindAsciiSubString(
     const RESTR_PTR(CHAR16) String,
     const RESTR_PTR(CHAR16) SubString
@@ -122,6 +123,7 @@ DEC_FUNC(BOOLEAN) FindAsciiSubString(
     /* Substring not found */
     return FALSE;
 }
+#endif
 
 
 

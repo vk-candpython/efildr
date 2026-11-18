@@ -112,11 +112,11 @@ INTERNAL UEFI (x86_64) DECLARATIONS */
 
 /* Check for EFI status success */
 #define EFI_OK(status) \
-    _LIKELY((INTN)(status) >= EFI_SUCCESS)
+    _LIKELY((INTN)(status) >= (INTN)EFI_SUCCESS)
 
 /* Check for EFI status failure */
 #define EFI_FAIL(status) \
-    _UNLIKELY((INTN)(status) < EFI_SUCCESS)
+    _UNLIKELY((INTN)(status) < (INTN)EFI_SUCCESS)
 
 
 /* Short-circuit EFI call chainer */
