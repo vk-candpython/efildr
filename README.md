@@ -1,4 +1,4 @@
-
+bash```
 gcc -o loader.efi loader.c \
     -m64          \
     -std=gnu11    \
@@ -24,7 +24,7 @@ gcc -o loader.efi loader.c \
     -Wl,--dynamicbase       \
     -Wl,--nxcompat          \
     -Wl,--high-entropy-va   \
-
+```
 
 
 
