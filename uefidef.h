@@ -1,12 +1,15 @@
 /*
+ * Date      : 19.11.2026
  * Author    : Vladislav Khudash (18 y.o., Ukraine)
  * Source    : https://github.com/vk-candpython/efildr/blob/main/uefidef.h
- * Compiler  : GCC, Clang (incl. MinGW)
+ * Compiler  : Clang, MinGW
  * Platform  : Linux, Windows (x86_64)
  * Target    : UEFI x86_64 (PE32+)
  * Summary   : UEFI standalone declarations and basic utilities.
  * Note      : Adapted from TianoCore EDK2 reference definitions.
- * Reference : https://github.com/tianocore/edk2/tree/master/MdePkg/Include
+ * Reference : UEFI Specification (Version: 2.11)
+ *             https://uefi.org/specifications
+ *             EDK2: https://github.com/tianocore/edk2/tree/master/MdePkg/Include
 */
 
 
@@ -94,11 +97,7 @@ typedef VOID *EFI_EVENT;
 ///=====================///
 
 
-#if defined(__linux__)
-    #define EFIAPI __attribute__((ms_abi))
-#else
-    #define EFIAPI
-#endif
+#define EFIAPI __attribute__((ms_abi))
 
 
 #define IN
@@ -108,8 +107,8 @@ typedef VOID *EFI_EVENT;
 
 #define NULL ((VOID*)0)
 
-#define FALSE ((BOOLEAN)0)
-#define TRUE  ((BOOLEAN)1)
+#define FALSE ((BOOLEAN)(0 == 1))
+#define TRUE  ((BOOLEAN)(1 != 0))
 
 
 #define IMAGE_SUBSYSTEM_EFI_APPLICATION 10
@@ -117,6 +116,9 @@ typedef VOID *EFI_EVENT;
 
 #define EFI_BACKGROUND_BLACK 0x00
 #define EFI_LIGHTRED         0x0C
+
+
+#define EFI_OPEN_PROTOCOL_GET_PROTOCOL 0x00000002
 
 
 #define EFI_FILE_MODE_READ 0x0000000000000001ULL
@@ -133,14 +135,40 @@ typedef VOID *EFI_EVENT;
 #define MAX_BIT 0x8000000000000000ULL
 
 #define ENCODE_ERROR(StatusCode) \
-    ((EFI_STATUS)(MAX_BIT | (StatusCode)))
+    ((EFI_STATUS)((StatusCode) | MAX_BIT))
 
 #define EFI_SUCCESS       ((EFI_STATUS)0)
 #define EFI_LOAD_ERROR    ENCODE_ERROR(1)
 #define EFI_ACCESS_DENIED ENCODE_ERROR(15)
 
 
-#define uefi_call_wrapper(func, numarg, ...) ((func)(__VA_ARGS__))
+#define uefi_call_wrapper(func, numarg, ...) \
+    ((func)(__VA_ARGS__))
+
+
+///=======================///
+/// *-----[FORWARD]-----* ///
+///=======================///
+
+
+/* Forward declarations for protocol and table
+   self-references prior to definition. */
+
+
+/* Placeholder for unused service table entries to preserve ABI layout. */
+typedef VOID (EFIAPI *EFI_UNUSED_SERVICE)(VOID);
+
+
+typedef struct EFI_SYSTEM_TABLE     EFI_SYSTEM_TABLE;
+typedef struct EFI_RUNTIME_SERVICES EFI_RUNTIME_SERVICES;
+typedef struct EFI_BOOT_SERVICES    EFI_BOOT_SERVICES;
+
+typedef struct _EFI_LOADED_IMAGE_PROTOCOL       EFI_LOADED_IMAGE_PROTOCOL;
+typedef struct _EFI_SIMPLE_TEXT_INPUT_PROTOCOL  EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
+typedef struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
+typedef struct _EFI_FILE_PROTOCOL               EFI_FILE_PROTOCOL;
+typedef struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
+typedef struct _EFI_PCI_IO_PROTOCOL             EFI_PCI_IO_PROTOCOL;
 
 
 ///====================///
@@ -203,27 +231,6 @@ typedef enum {
     EfiPciIoWidthFillUint64,
     EfiPciIoWidthMaximum
 } EFI_PCI_IO_PROTOCOL_WIDTH;
-
-
-///========================///
-/// *-----*[FORWARD]-----* ///
-///========================///
-
-
-typedef struct EFI_SYSTEM_TABLE     EFI_SYSTEM_TABLE;
-typedef struct EFI_RUNTIME_SERVICES EFI_RUNTIME_SERVICES;
-typedef struct EFI_BOOT_SERVICES    EFI_BOOT_SERVICES;
-
-typedef struct _EFI_LOADED_IMAGE_PROTOCOL       EFI_LOADED_IMAGE_PROTOCOL;
-typedef struct _EFI_SIMPLE_TEXT_INPUT_PROTOCOL  EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
-typedef struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
-typedef struct _EFI_FILE_PROTOCOL               EFI_FILE_PROTOCOL;
-typedef struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL EFI_SIMPLE_FILE_SYSTEM_PROTOCOL;
-typedef struct _EFI_PCI_IO_PROTOCOL             EFI_PCI_IO_PROTOCOL;
-
-
-/* Placeholder for unused service table entries to preserve ABI layout. */
-typedef VOID (EFIAPI *EFI_UNUSED_SERVICE)(VOID);
 
 
 ///======================///
@@ -342,7 +349,7 @@ typedef EFI_STATUS (EFIAPI *EFI_TEXT_STRING)(
 
 typedef EFI_STATUS (EFIAPI *EFI_TEXT_TEST_STRING)(
     IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
-    IN CHAR16                           *String
+    IN CHAR16                          *String
 );
 
 typedef EFI_STATUS (EFIAPI *EFI_TEXT_QUERY_MODE)(
@@ -435,7 +442,7 @@ typedef EFI_STATUS (EFIAPI *EFI_FILE_WRITE)(
 
 typedef EFI_STATUS (EFIAPI *EFI_FILE_GET_POSITION)(
     IN  EFI_FILE_PROTOCOL *This,
-    OUT UINT64             *Position
+    OUT UINT64            *Position
 );
 
 typedef EFI_STATUS (EFIAPI *EFI_FILE_SET_POSITION)(
@@ -522,7 +529,7 @@ struct _EFI_SIMPLE_FILE_SYSTEM_PROTOCOL {
 
 
 typedef EFI_STATUS (EFIAPI *EFI_PCI_IO_PROTOCOL_CONFIG)(
-    IN     EFI_PCI_IO_PROTOCOL       *This,
+    IN     EFI_PCI_IO_PROTOCOL      *This,
     IN     EFI_PCI_IO_PROTOCOL_WIDTH Width,
     IN     UINT32                    Offset,
     IN     UINTN                     Count,
@@ -633,13 +640,13 @@ typedef EFI_STATUS (EFIAPI *EFI_STALL)(
 );
 
 typedef VOID (EFIAPI *EFI_COPY_MEM)(
-    IN VOID  *Destination,
-    IN VOID  *Source,
+    IN VOID *Destination,
+    IN VOID *Source,
     IN UINTN Length
 );
 
 typedef VOID (EFIAPI *EFI_SET_MEM)(
-    IN VOID  *Buffer,
+    IN VOID *Buffer,
     IN UINTN Size,
     IN UINT8 Value
 );
@@ -650,7 +657,7 @@ typedef EFI_STATUS (EFIAPI *EFI_OPEN_PROTOCOL)(
     OUT VOID     **Interface OPTIONAL,
     IN  EFI_HANDLE AgentHandle,
     IN  EFI_HANDLE ControllerHandle,
-    IN  UINT32 Attributes
+    IN  UINT32     Attributes
 );
 
 typedef EFI_STATUS (EFIAPI *EFI_LOCATE_HANDLE_BUFFER)(
@@ -766,9 +773,9 @@ struct EFI_SYSTEM_TABLE {
     {0x4CF5B200, 0x68B8, 0x4CA5, {0x9E, 0xEC, 0xB2, 0x3E, 0x3F, 0x50, 0x02, 0x9A}}
 
 
-///=======================///
-/// *-----[GLOBALS]-----* ///
-///=======================///
+///======================///
+/// *-----[GLOBAL]-----* ///
+///======================///
 
 
 static EFI_SYSTEM_TABLE     *ST;

@@ -620,7 +620,7 @@ _ANTITRAP();
 {//* ALLOCATE IMAGE
 _ANTITRAP();
     EFI_PHYSICAL_ADDRESS imgAddr = 0;
-    UINTN imgPages = (UINTN)EFI_SIZE_TO_PAGES(hdOpt->SizeOfImage);
+    UINTN imgPages = EFI_SIZE_TO_PAGES((UINTN)hdOpt->SizeOfImage);
 
     IF_EFIFAIL_CALL (BS->AllocatePages,
         AllocateAnyPages, EfiLoaderCode,
