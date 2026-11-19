@@ -214,8 +214,6 @@ gcc -o loader.efi loader.c ^
     -Wl,--gc-sections
 ```
 
-GNU `ld` enables the base-relocation section by default for PE targets; `--dynamicbase` also implies `--enable-reloc-section`. You can add `-Wl,--enable-reloc-section` explicitly if you want that requirement visible in the command. See the [GNU ld PE/COFF options](https://sourceware.org/binutils/docs/ld/Options.html).
-
 ### 🔍 Verify the EFI Image
 
 After building, inspect the generated PE headers and sections:
