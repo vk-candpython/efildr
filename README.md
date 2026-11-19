@@ -1,4 +1,4 @@
-bash```
+```bash
 gcc -o loader.efi loader.c \
     -m64          \
     -std=gnu11    \
