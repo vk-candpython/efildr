@@ -1,3 +1,33 @@
+
+gcc -o loader.efi loader.c \
+    -m64          \
+    -std=gnu11    \
+    -Wall -Wextra \
+    -O3 -s -g0    \
+    \
+    -nostdlib      \
+    -ffreestanding \
+    -fshort-wchar  \
+    -mno-red-zone  \
+    \
+    -fno-ident           \
+    -fno-common          \
+    -fdata-sections      \
+    -ffunction-sections  \
+    -fstrict-aliasing    \
+    -fomit-frame-pointer \
+    -fvisibility=hidden  \
+    -fno-stack-protector \
+    \
+    -Wl,--subsystem,console \
+    -Wl,--gc-sections       \
+    -Wl,--dynamicbase       \
+    -Wl,--nxcompat          \
+    -Wl,--high-entropy-va   \
+
+
+
+
 # 👾 efildr
 
 
