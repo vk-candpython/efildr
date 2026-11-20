@@ -5,7 +5,7 @@
 //     LOCATION : Ukraine
 //
 // [ PINFO ]
-//     DATE     : 19.11.2026
+//     DATE     : 20.11.2026
 //     PROJECT  : REFLECTIVE-EFI-LOADER
 //     PLATFORM : UEFI
 /*=====================================*/
@@ -17,8 +17,8 @@
 
 
 REQUIREMENTS (
-    Сompiler : GCC (GNU-EFI)
-    Support  : UEFI (PE32+)
+    Сompiler : MinGW-w64
+    Support  : UEFI x86_64 (PE32+)
 )
 
 
@@ -28,7 +28,7 @@ INTERNAL LOADER DECLARATIONS */
 #include "loader.h"
 
 
-#if !defined(EFILDR_UEFIDEF_H)
+#if !defined(EFILDR_X86_64_UEFIDEF_H)
     #error "loader.c: uefidef.h are required."
 #endif
 
@@ -673,7 +673,7 @@ _ANTITRAP(); DEC_ASM (
 
         : : "r"(AddrOfEntryPoint), "r"(ImageHandle), "r"(SystemTable)
         : "memory", "cc", "rax", "rcx", "rdx"
-    ); __builtin_unreachable();
+    ); _UNREACHABLE();
 
 
 

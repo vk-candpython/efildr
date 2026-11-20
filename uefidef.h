@@ -1,9 +1,9 @@
 /*
- * Date      : 19.11.2026
+ * Date      : 20.11.2026
  * Author    : Vladislav Khudash (18 y.o., Ukraine)
  * Source    : https://github.com/vk-candpython/efildr/blob/main/uefidef.h
- * Compiler  : Clang, MinGW
- * Platform  : Linux, Windows (x86_64)
+ * Compiler  : MinGW-w64
+ * Platform  : x86_64
  * Target    : UEFI x86_64 (PE32+)
  * Summary   : UEFI standalone declarations and basic utilities.
  * Note      : Adapted from TianoCore EDK2 reference definitions.
@@ -15,8 +15,8 @@
 
 #pragma once
 
-#ifndef EFILDR_UEFIDEF_H
-#define EFILDR_UEFIDEF_H
+#ifndef EFILDR_X86_64_UEFIDEF_H
+#define EFILDR_X86_64_UEFIDEF_H
 
 
 ///========================================///
@@ -24,21 +24,13 @@
 ///========================================///
 
 
-#if !defined(__clang__) && !defined(__MINGW64__)
-    #error "uefidef.h: Clang or MinGW-w64 compiler is required."
+#if !defined(__MINGW64__)
+    #error "uefidef.h: MinGW-w64 compiler is required."
 #endif
 
 
 #if !defined(__x86_64__)
     #error "uefidef.h: x86_64 architecture is required."
-#endif
-
-#if !defined(__linux__) && !defined(_WIN64)
-    #error "uefidef.h: Linux or Windows OS is required."
-#endif
-
-#if !defined(__SIZEOF_WCHAR_T__) || (__SIZEOF_WCHAR_T__ != 2)
-    #error "uefidef.h: 16-bit wchar_t is required. (use -fshort-wchar)"
 #endif
 
 
@@ -813,4 +805,4 @@ static EFI_BOOT_SERVICES    *BS;
 })
 
 
-#endif /* EFILDR_UEFIDEF_H */
+#endif /* EFILDR_X86_64_UEFIDEF_H */

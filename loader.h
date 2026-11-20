@@ -1,8 +1,9 @@
 /*
  * Author   : Vladislav Khudash
  * Source   : https://github.com/vk-candpython/efildr/blob/main/loader.h
- * Compiler : GCC (GNU-EFI)
- * Platform : UEFI (PE32+)
+ * Compiler : MinGW-w64
+ * Platform : x86_64
+ * Target   : UEFI x86_64 (PE32+)
  * Summary  : Core configuration header, custom NT structures, and basic utilities.
 */
 
@@ -56,13 +57,13 @@ INTERNAL UEFI (x86_64) DECLARATIONS */
  *************************************/
 
 
-#define LDR_ERR_PREFIX L"\r\n(efildr) [ERROR]: "
+#define LDR_ERR_PREFIX u"\r\n(efildr) [ERROR]: "
 
-#define LDR_ERR_ANALYSIS     L"Image initialization failed.\r\n"
-#define LDR_ERR_SUBSYSTEM    L"Image is not an EFI application.\r\n"
-#define LDR_ERR_OVERLAY      L"Image overlay is corrupted.\r\n"
-#define LDR_ERR_ALLOC_IMAGE  L"Image memory allocation failed.\r\n"
-#define LDR_ERR_LOADED_IMAGE L"Loaded image protocol access failed.\r\n"
+#define LDR_ERR_ANALYSIS     u"Image initialization failed.\r\n"
+#define LDR_ERR_SUBSYSTEM    u"Image is not an EFI application.\r\n"
+#define LDR_ERR_OVERLAY      u"Image overlay is corrupted.\r\n"
+#define LDR_ERR_ALLOC_IMAGE  u"Image memory allocation failed.\r\n"
+#define LDR_ERR_LOADED_IMAGE u"Loaded image protocol access failed.\r\n"
 
 
 
@@ -102,6 +103,11 @@ INTERNAL UEFI (x86_64) DECLARATIONS */
 #define RESTR_PTR(TYPE) \
     TYPE *restrict
 
+
+
+/* Inform compiler that
+   this code path is never reached */
+#define _UNREACHABLE() __builtin_unreachable()
 
 
 /* Branch prediction hints for compiler optimization */
@@ -157,7 +163,7 @@ INTERNAL UEFI (x86_64) DECLARATIONS */
 
 /* Function declaration helper */
 #define DEC_FUNC(TYPE) \
-    static inline _DEC_ATTR(always_inline) TYPE
+    static inline EFIAPI _DEC_ATTR(always_inline) TYPE
 
 
 
@@ -259,10 +265,10 @@ INTERNAL UEFI (x86_64) DECLARATIONS */
 /* Common physical PC UEFI
    firmware vendor substrings */
 #define IBV_FIRMWARE_VENDORS {                                        \
-    L"megatrends", /* (American Megatrends International, LLC.) */    \
-    L"insyde",     /* (INSYDE Corp.) */                               \
-    L"phoenix",    /* (Phoenix Technologies Ltd.) */                  \
-    L"byosoft",    /* (Nanjing Byosoft Co., Ltd.) */                  \
+    u"megatrends", /* (American Megatrends International, LLC.) */    \
+    u"insyde",     /* (INSYDE Corp.) */                               \
+    u"phoenix",    /* (Phoenix Technologies Ltd.) */                  \
+    u"byosoft",    /* (Nanjing Byosoft Co., Ltd.) */                  \
 }
 
 
